@@ -5,13 +5,13 @@ import java.util.Hashtable;
 public final class RentalUrls {
 
     public final String startOfUrl = "https://";
-    public Hashtable<String, String> urlsMap = new Hashtable<String, String>();
+    public Hashtable<String, String> urls = new Hashtable<String, String>();
 
     /**
      * Constructor class, building out the hashtable with used urls
      */
     public RentalUrls() {
-        urlsMap.put("craigslist", ".craigslist.org/");
+        urls.put("craigslist", ".craigslist.org/");
     }
 
     /**
@@ -20,8 +20,8 @@ public final class RentalUrls {
      * @return base url string
      */
     public String getUrl(String rentalCompany) {
-        if (urlsMap.get(rentalCompany) == null) return null;
-        return startOfUrl + "www" + urlsMap.get(rentalCompany);
+        if (urls.get(rentalCompany) == null) return null;
+        return startOfUrl + "www" + urls.get(rentalCompany);
     }
 
     /**
@@ -31,7 +31,7 @@ public final class RentalUrls {
      * @return base url string with a city
      */
     public String getUrl(String rentalCompany, String city) {
-        if (urlsMap.get(rentalCompany) == null) return null;
-        return startOfUrl + city + urlsMap.get(rentalCompany);
+        if (urls.get(rentalCompany) == null) return null;
+        return startOfUrl + city + urls.get(rentalCompany);
     }
 }

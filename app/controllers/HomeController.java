@@ -1,10 +1,13 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.google.gson.Gson;
 import injection.RentalUrls;
 import play.mvc.*;
 import services.CraigslistParser;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * This controller contains an action to handle HTTP requests
@@ -20,8 +23,10 @@ public class HomeController extends Controller {
      * <code>GET</code> request with a path of <code>/</code>.
      */
     public Result index() throws IOException {
-        String result = craigslistParser.getCraigslistData();
-        return ok(result);
+        ArrayList result = craigslistParser.getCraigslistData();
+        //convert arraylist to json
+        String jsonResult = new Gson().toJson(result);
+        return ok(jsonResult);
     }
 
     /**
