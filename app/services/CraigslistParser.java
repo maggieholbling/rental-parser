@@ -1,6 +1,7 @@
 package services;
 
 import injection.RentalUrls;
+import models.RentalModel;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -21,20 +22,24 @@ public class CraigslistParser extends Parser {
         super(urls);
     }
 
-    public ArrayList<Hashtable<String, String>> getCraigslistData() throws IOException {
+    public ArrayList<RentalModel> getCraigslistData() throws IOException {
         url = urls.getUrl("craigslist", "vancouver") + "search/apa?sort=date&hasPic=1&postedToday=1&bundleDuplicates=1&search_distance=18&postal=V6B3H6&min_price=1000&max_price=1500&availabilityMode=0&laundry=1&laundry=2&laundry=3&sale_date=all+dates";
+        // get listings page body (1st page only)
         Document listingDoc = Jsoup.connect(url).get();
         Elements listingLinks = listingDoc.select("a.result-image");
 
-        ArrayList<Hashtable<String, String>> listings = new ArrayList<Hashtable<String, String>>();
+        ArrayList<RentalModel> listings = new ArrayList<RentalModel>();
 
         for (Element e :listingLinks) {
-            Hashtable<String, String> listing = new Hashtable<String, String>();
-
             String link = e.attr("href");
+            // get individual listing body
             Document doc = Jsoup.connect(link).get();
             //ensure spacing stays the same
             doc.outputSettings().indentAmount(0).prettyPrint(false);
+
+            Elements price = doc.select("section#postingbody");
+            Elements date = doc.select("section#postingbody");
+            Elements images = doc.select("section#postingbody");
 
             Elements descriptionElement = doc.select("section#postingbody");
             Element descriptionBreaks = descriptionElement.select("br").first();
@@ -43,13 +48,16 @@ public class CraigslistParser extends Parser {
             if (descriptionBreaks != null) {
                 //remove extra div
                 descriptionElement.select("div.print-information").remove();
-                doc.outputSettings().indentAmount(0).prettyPrint(false);
-                listing.put("description", descriptionElement.html());
+//                listing.put("description", descriptionElement.html());
+                //create new RentalModel instance
+                RentalModel listing = new RentalModel(descriptionElement.html(), );
             }
+
+
 //            listing.put("images": )
 //            listing.put("price": )
 
-            listings.add(listing);
+//            listings.add(listing);
         }
 
 
