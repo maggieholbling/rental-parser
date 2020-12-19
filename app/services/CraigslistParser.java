@@ -15,21 +15,23 @@ import java.util.Hashtable;
 public class CraigslistParser extends Parser {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     // url for this request
-    public String url;
+    String url; // I could be wrong but i think the only place this url gets used is un the getCraigslistData function. This could be turned into a local variable
 
     public CraigslistParser(RentalUrls urls) {
         super(urls);
     }
 
-    public ArrayList<Hashtable<String, String>> getCraigslistData() throws IOException {
+    public ArrayList<Hashtable<String, String>> getCraigslistData() throws IOException { // Catch errors and handle them yourself
+
+        // A nicer way to concat strings is using String.format(""); https://www.javatpoint.com/java-string-format
         url = urls.getUrl("craigslist", "vancouver") + "search/apa?sort=date&hasPic=1&postedToday=1&bundleDuplicates=1&search_distance=18&postal=V6B3H6&min_price=1000&max_price=1500&availabilityMode=0&laundry=1&laundry=2&laundry=3&sale_date=all+dates";
         Document listingDoc = Jsoup.connect(url).get();
         Elements listingLinks = listingDoc.select("a.result-image");
 
-        ArrayList<Hashtable<String, String>> listings = new ArrayList<Hashtable<String, String>>();
+        ArrayList<Hashtable<String, String>> listings = new ArrayList<>(); // Dont need to specify the Arraylist twice, it gets set exlicitly on the second one
 
-        for (Element e :listingLinks) {
-            Hashtable<String, String> listing = new Hashtable<String, String>();
+        for (Element e : listingLinks) {
+            Hashtable<String, String> listing = new Hashtable<String, String>(); // same as above, dont need <String, String> on the second one
 
             String link = e.attr("href");
             Document doc = Jsoup.connect(link).get();
